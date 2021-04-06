@@ -9,4 +9,3 @@ moduleAlias.addAliases({
 });
 
 
-console.log(files);
