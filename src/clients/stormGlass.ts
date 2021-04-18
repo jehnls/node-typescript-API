@@ -47,7 +47,6 @@ export class StormGlass {
         },
       }
     );
-    console.log(response);
     return this.normalizeResponse(response.data); 
   }
 
@@ -55,7 +54,6 @@ export class StormGlass {
   private normalizeResponse(
     points: StormGlassForecastResponse
   ): ForecastPoint[] {
-    //Erro here in hours
     return points.hours.filter(this.isValidPoint.bind(this)).map((point) => ({
       swellDirection: point.swellDirection[this.stormGlassAPISource],
       swellHeight: point.swellHeight[this.stormGlassAPISource],
@@ -81,7 +79,3 @@ export class StormGlass {
     );
   }
 }
-
-
-
- 
