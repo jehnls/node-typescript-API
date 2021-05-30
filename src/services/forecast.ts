@@ -6,7 +6,7 @@ export interface TimeForecast {
   forecast: BeachForecast[];
 }
 
-export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint { }
+export interface BeachForecast extends Omit<Beach, 'user'>, ForecastPoint {}
 
 export class ForecastProcessingIntenalError extends InternalError {
   constructor(message: string) {
@@ -15,7 +15,7 @@ export class ForecastProcessingIntenalError extends InternalError {
 }
 
 export class Forecast {
-  constructor(protected stormGlass = new StormGlass()) { }
+  constructor(protected stormGlass = new StormGlass()) {}
 
   public async processForecastForBeaches(
     beaches: Beach[]

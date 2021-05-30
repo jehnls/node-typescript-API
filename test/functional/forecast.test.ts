@@ -1,4 +1,4 @@
-import { Beach, BeachPosition } from "@src/models/beach";
+import { Beach, BeachPosition } from '@src/models/beach';
 import nock from 'nock';
 import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json';
 import apiForecastResponse1BeachFixture from '@test/fixtures/api_forecast_response_1_beach.json';
@@ -14,7 +14,7 @@ describe('Beach forecast funcinal tests', () => {
     };
     const beach = new Beach(defaultBeach);
     await beach.save();
-  })
+  });
   it('should return a forecast with just a few times', async () => {
     nock('https://api.stormglass.io:443', {
       encodedQueryParams: true,
@@ -43,13 +43,13 @@ describe('Beach forecast funcinal tests', () => {
         Authorization: (): boolean => true,
       },
     })
-    .defaultReplyHeaders({ 'access-control-allow-origin': '*'})
-    .get('/v1/weather/point')
-    .query({ lat: '-33.792726', lng: '151.289824' })
-    .replyWithError('Something went wrong');
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .get('/v1/weather/point')
+      .query({ lat: '-33.792726', lng: '151.289824' })
+      .replyWithError('Something went wrong');
 
     const { status } = await global.testRequest.get(`/forecast`);
 
     expect(status).toBe(500);
   });
-}); 
+});
