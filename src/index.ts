@@ -1,4 +1,8 @@
-import * as path from 'path';
+import { SetupServer } from './server';
+import config from 'config';
 
-const files = path.resolve(__dirname);
-console.log('test: ' + files);
+(async (): Promise<void> => {
+  const server = new SetupServer(config.get('App.port'));
+  await server.init();
+  server.start();
+})();
