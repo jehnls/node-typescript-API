@@ -1,12 +1,12 @@
 import { User } from '@src/models/user';
-import { response } from 'express';
+import AuthService from '@src/services/auth';
 
 describe('Users functional tests', () => {
   beforeEach(async () => {
     await User.deleteMany({});
   });
   describe('When create a new user', () => {
-    it('shound successfully create new a user', async () => {
+    it('shound successfully create new a user with encrypted password', async () => {
       const newUser = {
         name: 'john Doe',
         email: 'john@email.com',
@@ -15,7 +15,15 @@ describe('Users functional tests', () => {
 
       const response = await global.testRequest.post('/users').send(newUser);
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(expect.objectContaining(newUser));
+      await expect(
+        AuthService.comparePasswords(newUser.password, response.body.password)
+      ).resolves.toBeTruthy();
+      expect(response.body).toEqual(
+        expect.objectContaining({
+          ...newUser,
+          ...{ password: expect.any(String) },
+        })
+      );
     });
 
     it('should return 422 when there is a validation error', async () => {
@@ -40,12 +48,12 @@ describe('Users functional tests', () => {
       };
 
       await global.testRequest.post('/users').send(newUser);
-      const response =  await global.testRequest.post('/users').send(newUser);
+      const response = await global.testRequest.post('/users').send(newUser);
 
       expect(response.status).toBe(409);
       expect(response.body).toEqual({
         code: 409,
-        error: 'User validation failed: email: already exists in the database.'
+        error: 'User validation failed: email: already exists in the database.',
       });
     });
   });
